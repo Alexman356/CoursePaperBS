@@ -19,6 +19,12 @@ namespace Course_paper
 
         private void ButtonAutorization_Click(object sender, EventArgs e)
         {
+            if ((LoginField.Text == "Введите логин") || (PassField.Text == "Введите пароль"))
+            {
+                MessageBox.Show("Не все поля заполнены!");
+                return;
+            }
+
             String loginUser = LoginField.Text;
             String passUser = PassField.Text;
 
