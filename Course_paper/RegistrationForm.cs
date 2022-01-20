@@ -4,16 +4,17 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Course_paper
+namespace CoursePaper
 {
     public partial class RegistrationForm : Form
     {
-        AutorizationForm autorization;
+        readonly AutorizationForm autorization;
+        Database database = new Database();
+
         public RegistrationForm(AutorizationForm autorization)
         {
             InitializeComponent();
             this.autorization = autorization;
-            autorization.Enabled = false;
             NameField.Text = "Введите имя";
             NameField.ForeColor = Color.Gray;
             SurnameField.Text = "Введите фамилию";
@@ -24,7 +25,116 @@ namespace Course_paper
             PassField.ForeColor = Color.Gray;
         }
 
-        private void NameField_Enter(object sender, EventArgs e)
+        private void BtnRegistrationClick(object sender, EventArgs e)
+        {
+            if (NameField.Text == "Введите имя" || SurnameField.Text == "Введите фамилию"
+                || LoginField.Text == "Введите логин" || PassField.Text == "Введите пароль")
+            {
+                MessageBox.Show("Не все поля заполнены!");
+
+                return;
+            }
+
+            if (UserIsExists(LoginField.Text))
+            {
+                return;
+            }
+
+            Registration(LoginField.Text, PassField.Text, NameField.Text, SurnameField.Text);
+        }
+
+        private bool UserIsExists(string login)
+        {
+            DataTable table = new DataTable();
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            MySqlCommand command = new MySqlCommand("SELECT * FROM `users` WHERE `login` = @uL", database.Connection);
+
+            try
+            {
+                command.Parameters.Add("@uL", MySqlDbType.VarChar).Value = login;
+
+                adapter.SelectCommand = command;
+                adapter.Fill(table);
+
+                bool loginIsFound = table.Rows.Count > 0;
+
+                if (loginIsFound)
+                {
+                    MessageBox.Show("Логин уже занят другим пользователем!");
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при проверке логина!\n{ex}");
+
+                return true;
+            }
+            finally
+            {
+                database.CloseConnection();
+            }
+        }
+
+        private void Registration(string login, string pass, string name, string surname)
+        {
+            MySqlCommand command = new MySqlCommand("INSERT INTO users (`login`, `pass`, `Name`, `Surname`) VALUES (@login, @pass, @name, @surname)", database.Connection);
+
+            try
+            {
+                command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
+                command.Parameters.Add("@pass", MySqlDbType.VarChar).Value = pass;
+                command.Parameters.Add("@name", MySqlDbType.VarChar).Value = name;
+                command.Parameters.Add("@surname", MySqlDbType.VarChar).Value = surname;
+
+                database.OpenConnection();
+
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    MessageBox.Show("Вы зарегистрировались!");
+                    autorization.Enabled = true;
+                    Close();
+                }
+
+                database.CloseConnection();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при регистрации!\n{ex}");
+            }
+            finally
+            {
+                database.CloseConnection();
+            }
+        }
+
+        private void LinkToRegistrationClick(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            autorization.Show();
+            Close();
+        }
+
+        private void BtnExitClick(object sender, EventArgs e)
+        {
+            DialogResult dialog = MessageBox.Show("Вы действительно хотите выйти из программы?", "Завершение программы", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (dialog == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void RegistrationFormClosing(object sender, FormClosingEventArgs e)
+        {
+            autorization.Show();
+        }
+
+        private void NameFieldEnter(object sender, EventArgs e)
         {
             if (NameField.Text == "Введите имя")
             {
@@ -33,8 +143,10 @@ namespace Course_paper
             }
         }
 
-        private void NameField_Leave(object sender, EventArgs e)
+        private void NameFieldLeave(object sender, EventArgs e)
         {
+            NameField.Text = NameField.Text.Trim();
+
             if (NameField.Text == "")
             {
                 NameField.Text = "Введите имя";
@@ -42,7 +154,7 @@ namespace Course_paper
             }
         }
 
-        private void SurnameField_Enter(object sender, EventArgs e)
+        private void SurnameFieldEnter(object sender, EventArgs e)
         {
             if (SurnameField.Text == "Введите фамилию")
             {
@@ -51,8 +163,10 @@ namespace Course_paper
             }
         }
 
-        private void SurnameField_Leave(object sender, EventArgs e)
+        private void SurnameFieldLeave(object sender, EventArgs e)
         {
+            SurnameField.Text = SurnameField.Text.Trim();
+
             if (SurnameField.Text == "")
             {
                 SurnameField.Text = "Введите фамилию";
@@ -60,7 +174,7 @@ namespace Course_paper
             }
         }
 
-        private void LoginField_Enter(object sender, EventArgs e)
+        private void LoginFieldEnter(object sender, EventArgs e)
         {
             if (LoginField.Text == "Введите логин")
             {
@@ -69,8 +183,10 @@ namespace Course_paper
             }
         }
 
-        private void LoginField_Leave(object sender, EventArgs e)
+        private void LoginFieldLeave(object sender, EventArgs e)
         {
+            LoginField.Text = LoginField.Text.Trim();
+
             if (LoginField.Text == "")
             {
                 LoginField.Text = "Введите логин";
@@ -78,7 +194,7 @@ namespace Course_paper
             }
         }
 
-        private void PassField_Enter(object sender, EventArgs e)
+        private void PassFieldEnter(object sender, EventArgs e)
         {
             if (PassField.Text == "Введите пароль")
             {
@@ -88,106 +204,16 @@ namespace Course_paper
             }
         }
 
-        private void PassField_Leave(object sender, EventArgs e)
+        private void PassFieldLeave(object sender, EventArgs e)
         {
+            PassField.Text = PassField.Text.Trim();
+
             if (PassField.Text == "")
             {
                 PassField.UseSystemPasswordChar = false;
                 PassField.Text = "Введите пароль";
                 PassField.ForeColor = Color.Gray;
             }
-        }
-
-        private void ButtonRegistration_Click(object sender, EventArgs e)
-        {
-            if (NameField.Text == "Введите имя")
-            {
-                MessageBox.Show("Не все поля заполнены!");
-                return;
-            }
-
-            if (SurnameField.Text == "Введите фамилию")
-            {
-                MessageBox.Show("Не все поля заполнены!");
-                return;
-            }
-
-            if (LoginField.Text == "Введите логин")
-            {
-                MessageBox.Show("Не все поля заполнены!");
-                return;
-            }
-
-            if (PassField.Text == "Введите пароль")
-            {
-                MessageBox.Show("Не все поля заполнены!");
-                return;
-            }
-
-            if (IsUserExists())
-                return;
-
-            Database database = new Database();
-
-            MySqlCommand command = new MySqlCommand("INSERT INTO users (`login`, `pass`, `Name`, `Surname`) VALUES (@login, @pass, @name, @surname)", database.GetConnection());
-
-            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = LoginField.Text;
-            command.Parameters.Add("@pass", MySqlDbType.VarChar).Value = PassField.Text;
-            command.Parameters.Add("@name", MySqlDbType.VarChar).Value = NameField.Text;
-            command.Parameters.Add("@surname", MySqlDbType.VarChar).Value = SurnameField.Text;
-
-            database.OpenConnection();
-
-            if (command.ExecuteNonQuery() == 1)
-            {
-                this.Hide();
-                MessageBox.Show("Вы зарегистрировались!");
-                autorization.Enabled = true;
-            }
-            else
-                MessageBox.Show("Аккаунт с таким логином уже существует!");
-
-            database.CloseConnection();
-        }
-
-        public bool IsUserExists()
-        {
-            Database database = new Database();
-
-            DataTable table = new DataTable();
-
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
-
-            MySqlCommand command = new MySqlCommand("SELECT * FROM `users` WHERE `login` = @uL", database.GetConnection());
-            command.Parameters.Add("@uL", MySqlDbType.VarChar).Value = LoginField.Text;
-
-            adapter.SelectCommand = command;
-            adapter.Fill(table);
-
-            if (table.Rows.Count > 0)
-            {
-                MessageBox.Show("Введенный логин уже занят другим пользователем!");
-                return true;
-            }
-            else
-                return false;
-        }
-
-        private void RegistrationLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void ExitButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void RegistrationForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = false;
-            autorization.Enabled = true;
-            autorization.Show();
         }
     }
 }

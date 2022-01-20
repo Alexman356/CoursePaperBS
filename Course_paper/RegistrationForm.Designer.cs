@@ -1,5 +1,5 @@
 ﻿
-namespace Course_paper
+namespace CoursePaper
 {
     partial class RegistrationForm
     {
@@ -55,7 +55,7 @@ namespace Course_paper
             this.RegistrationLabel.TabIndex = 0;
             this.RegistrationLabel.TabStop = true;
             this.RegistrationLabel.Text = "Войти";
-            this.RegistrationLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.RegistrationLabel_LinkClicked);
+            this.RegistrationLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkToRegistrationClick);
             // 
             // TextAutorization
             // 
@@ -74,8 +74,8 @@ namespace Course_paper
             this.PassField.Name = "PassField";
             this.PassField.Size = new System.Drawing.Size(215, 30);
             this.PassField.TabIndex = 4;
-            this.PassField.Enter += new System.EventHandler(this.PassField_Enter);
-            this.PassField.Leave += new System.EventHandler(this.PassField_Leave);
+            this.PassField.Enter += new System.EventHandler(this.PassFieldEnter);
+            this.PassField.Leave += new System.EventHandler(this.PassFieldLeave);
             // 
             // NameField
             // 
@@ -84,8 +84,8 @@ namespace Course_paper
             this.NameField.Name = "NameField";
             this.NameField.Size = new System.Drawing.Size(215, 30);
             this.NameField.TabIndex = 1;
-            this.NameField.Enter += new System.EventHandler(this.NameField_Enter);
-            this.NameField.Leave += new System.EventHandler(this.NameField_Leave);
+            this.NameField.Enter += new System.EventHandler(this.NameFieldEnter);
+            this.NameField.Leave += new System.EventHandler(this.NameFieldLeave);
             // 
             // ButtonRegistration
             // 
@@ -101,7 +101,7 @@ namespace Course_paper
             this.ButtonRegistration.TabIndex = 5;
             this.ButtonRegistration.Text = "Зарегистрироваться";
             this.ButtonRegistration.UseVisualStyleBackColor = false;
-            this.ButtonRegistration.Click += new System.EventHandler(this.ButtonRegistration_Click);
+            this.ButtonRegistration.Click += new System.EventHandler(this.BtnRegistrationClick);
             // 
             // SurnameField
             // 
@@ -110,8 +110,8 @@ namespace Course_paper
             this.SurnameField.Name = "SurnameField";
             this.SurnameField.Size = new System.Drawing.Size(215, 30);
             this.SurnameField.TabIndex = 2;
-            this.SurnameField.Enter += new System.EventHandler(this.SurnameField_Enter);
-            this.SurnameField.Leave += new System.EventHandler(this.SurnameField_Leave);
+            this.SurnameField.Enter += new System.EventHandler(this.SurnameFieldEnter);
+            this.SurnameField.Leave += new System.EventHandler(this.SurnameFieldLeave);
             // 
             // LoginField
             // 
@@ -120,8 +120,8 @@ namespace Course_paper
             this.LoginField.Name = "LoginField";
             this.LoginField.Size = new System.Drawing.Size(215, 30);
             this.LoginField.TabIndex = 3;
-            this.LoginField.Enter += new System.EventHandler(this.LoginField_Enter);
-            this.LoginField.Leave += new System.EventHandler(this.LoginField_Leave);
+            this.LoginField.Enter += new System.EventHandler(this.LoginFieldEnter);
+            this.LoginField.Leave += new System.EventHandler(this.LoginFieldLeave);
             // 
             // Text_Down1
             // 
@@ -148,7 +148,7 @@ namespace Course_paper
             this.ExitButton.TabIndex = 11;
             this.ExitButton.Text = "Выход";
             this.ExitButton.UseVisualStyleBackColor = false;
-            this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
+            this.ExitButton.Click += new System.EventHandler(this.BtnExitClick);
             // 
             // RegistrationForm
             // 
@@ -171,7 +171,7 @@ namespace Course_paper
             this.Name = "RegistrationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Регистрация";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RegistrationForm_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RegistrationFormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

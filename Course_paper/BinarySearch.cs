@@ -1,60 +1,129 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 
-namespace Course_paper
+namespace CoursePaper
 {
     class BinarySearch
     {
-        static string[] names_array;
-        public static char[] Wanted_char_array { get; set; }
+        private readonly string[] names;
+        private readonly Contact[] contacts;
 
-        static bool IsWantedValue(int index)//данный метод осуществляет проверку на то что текущее слово соответсвтует тому что нужно найти
+        public BinarySearch(Contact[] contacts)
         {
-            for (int i = 0; i < Wanted_char_array.Length; i++)
-                if (names_array[index].ToCharArray().Length - 1 >= i)
-                    if (Wanted_char_array[i] != names_array[index].ToCharArray()[i])
-                    return false;
-            return true;
+            names = contacts.Select(contact => contact.Name.ToLower()).ToArray();
+
+            this.contacts = contacts;
         }
 
-        static int BinarySearchCore()//
+        public Contact Search(string searchedName)
         {
-            int left = 0, right = names_array.Length - 1;
-            while (left <= right) //пока не сошлись границы массива
+            int index = -1;
+
+            if (searchedName != null)
             {
-                bool is_left_border = false, is_right_border = false;
-                int middle = left + (right - left) / 2; //индекс среднего элемента
-
-                if (right - left == 1)
-                {
-                    if (IsWantedValue(left)) return left;
-                    if (IsWantedValue(right)) return right;
-                    return -1;
-                }
-                
-                if (IsWantedValue(middle)) return middle;
-                else for (int i = 0; i < Wanted_char_array.Length; i++)
-                        if (names_array[middle].ToCharArray().Length - 1 >= i)
-                            if ((Wanted_char_array[i] != names_array[middle].ToCharArray()[i]))
-                            if ((Wanted_char_array[i] < names_array[middle].ToCharArray()[i]))
-                            {
-                                if (is_left_border != true) is_right_border = true;
-                            }
-                            else if (is_right_border != true) is_left_border = true;
-
-                //Для корректной работы имена должны быть с большой буквы!!!
-
-                if (!is_left_border && is_right_border) right = middle; //сужаем рабочую зону массива с правой стороны
-                if (!is_right_border && is_left_border) left = middle; //сужаем рабочую зону массива с левой стороны
+                index = SearchName(searchedName.ToLower());
             }
-            return -1; //ничего не нашли
-        }//
 
-        public static int SearchContact(List<ContactDatabase> data)//Данный метод был создан для заполнения списка именами из БД
+            if (index == -1)
+            {
+                return null;
+            }
+
+            Contact contact = new Contact(contacts[index].Name, contacts[index].Number);
+
+            return contact;
+        }
+
+        private int SearchName(string searchedName)
         {
-            names_array = new string[data.Count];
-            for (int i = 0; i <= data.Count - 1; i++) names_array[i] = data[i].Name;
+            int index = -1;
+            int left = 0;
+            int right = names.Length - 1;
 
-            return BinarySearchCore();
+            while (left <= right)
+            {
+                index = Iteration(searchedName, ref left, ref right);
+
+                bool NameIsFound = index != -1;
+
+                if (NameIsFound)
+                {
+                    return index;
+                }
+            }
+
+            return index;
+        }
+
+        private int Iteration(string searchedName, ref int left, ref int right)
+        {
+            int middle = left + (right - left) / 2;
+
+            if (IsSearchedName(searchedName, middle))
+            {
+                return middle;
+            }
+
+            string middleName = names[middle];
+            char[] searchedNameLetters = searchedName.ToCharArray();
+            char[] middleNameLetters = middleName.ToCharArray();
+
+            if (searchedNameLetters.Length < middleNameLetters.Length)
+            {
+                Array.Resize(ref searchedNameLetters, middleNameLetters.Length);
+            }
+
+            if (searchedNameLetters.Length > middleNameLetters.Length)
+            {
+                Array.Resize(ref middleNameLetters, searchedNameLetters.Length);
+            }
+
+            for (int i = 0; i < searchedNameLetters.Length; i++)
+            {
+                bool LettersAreEqual = searchedNameLetters[i] == middleNameLetters[i];
+
+                if (LettersAreEqual)
+                {
+                    continue;
+                }
+
+                bool isStepToLeft = searchedNameLetters[i] < middleNameLetters[i];
+
+                if (isStepToLeft)
+                {
+                    right = middle - 1;
+                    break;
+                }
+
+                if (!isStepToLeft)
+                {
+                    left = middle + 1;
+                    break;
+                }
+            }
+
+            return -1;
+        }
+
+        private bool IsSearchedName(string searchedName, int index)
+        {
+            char[] currentNameLetters = names[index].ToCharArray();
+            char[] searchedNameLetters = searchedName.ToCharArray();
+
+            if (searchedNameLetters.Length != currentNameLetters.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < searchedNameLetters.Length; i++)
+            {
+                if (searchedNameLetters[i] != currentNameLetters[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

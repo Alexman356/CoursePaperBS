@@ -1,27 +1,32 @@
 ﻿using MySql.Data.MySqlClient;
+using System.Data;
 
-namespace Course_paper
+namespace CoursePaper
 {
     class Database
     {
-        MySqlConnection connection = new MySqlConnection("server=localhost; port=3306; username=root; password=; database=binary_search; SSLmode=none");
+        public MySqlConnection Connection { get; } = new MySqlConnection(
+            "server=localhost;" +
+            "port=3306;" +
+            "username=root;" +
+            "password=;" +
+            "database=binary_search;" +
+            "SSLmode=none");
 
         public void OpenConnection()
         {
-            if (connection.State == System.Data.ConnectionState.Closed)
-                connection.Open();
+            if (Connection.State == ConnectionState.Closed)
+            {
+                Connection.Open();
+            }
         }
 
         public void CloseConnection()
         {
-            if (connection.State == System.Data.ConnectionState.Open)
-                connection.Close();
+            if (Connection.State == ConnectionState.Open)
+            {
+                Connection.Close();
+            }
         }
-
-        public MySqlConnection GetConnection()
-        {
-            return connection;
-        }
-
     }
 }

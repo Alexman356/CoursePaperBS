@@ -1,58 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Course_paper
+namespace CoursePaper
 {
     [TestClass]
     public class Test
     {
+        private string number = "890583455135";
+        private string[] names = new string[] { "Анна", "Виктория", "Григорий", "Григорий2", "Григяорий",
+            "Евгений", "Женя", "Игнат", "Катя Евдокимова"};
+
+        BinarySearch binarySearch;
+
+        [TestInitialize]
+        public void Init()
+        {
+            Contact[] contacts = new Contact[names.Length];
+
+            contacts = names.Select(name => new Contact(name, number)).ToArray();
+
+            binarySearch = new BinarySearch(contacts);
+        }
+
         [TestMethod]
         public void Test1()
         {
-            List<ContactDatabase> _data = new List<ContactDatabase>();
-            string[] contact = new string[4] {"Анна", "Виктория", "Григорий", "Евгений"};
-            for (int i = 0; i < contact.Length; i++)
-            {
-                ContactDatabase contact_data = new ContactDatabase(contact[i], "513");
-                _data.Add(contact_data);
-            }
-            BinarySearch.Wanted_char_array = "Григорий".ToCharArray();
-            int status = BinarySearch.SearchContact(_data);
-            Assert.AreEqual(2, status);
-        }
-        [TestMethod]
+            string searchedName = "Григорий";
 
+            Contact actual = binarySearch.Search(searchedName);
+            Contact expected = new Contact("Григорий", number);
+
+            Assert.ReferenceEquals(expected, actual);
+        }
+
+        [TestMethod]
         public void Test2()
         {
-            List<ContactDatabase> _data = new List<ContactDatabase>();
-            string[] contact = new string[8] { "Анна", "Виктория", "Григорий", "Григяорий", "Евгений", "Женя", "Игнат", "Катя" };
-            for (int i = 0; i < contact.Length; i++)
-            {
-                ContactDatabase contact_data = new ContactDatabase(contact[i], "513");
-                _data.Add(contact_data);
-            }
-            BinarySearch.Wanted_char_array = "Григяорий".ToCharArray();
-            int status = BinarySearch.SearchContact(_data);
-            Assert.AreEqual(3, status);
+            string searchedName = "Григорий2";
+
+            Contact actual = binarySearch.Search(searchedName);
+            Contact expected = new Contact("Григорий2", number);
+
+            Assert.ReferenceEquals(expected, actual);
         }
 
         [TestMethod]
         public void Test3()
         {
-            List<ContactDatabase> _data = new List<ContactDatabase>();
-            string[] contact = new string[8] { "Анна", "Виктория", "Григорий", "Григяорий", "Евгений", "Женя", "Игнат", "Катя" };
-            for (int i = 0; i < contact.Length; i++)
-            {
-                ContactDatabase contact_data = new ContactDatabase(contact[i], "513");
-                _data.Add(contact_data);
-            }
-            BinarySearch.Wanted_char_array = "Никита".ToCharArray();
-            int status = BinarySearch.SearchContact(_data);
-            Assert.AreEqual(-1, status);
+            string searchedName = "григорий2";
+
+            Contact actual = binarySearch.Search(searchedName);
+            Contact expected = new Contact("Григорий2", number);
+
+            Assert.ReferenceEquals(expected, actual);
+        }
+
+        [TestMethod]
+        public void Test4()
+        {
+            string searchedName = "Катя Евдокимова";
+
+            Contact actual = binarySearch.Search(searchedName);
+            Contact expected = new Contact("Катя Евдокимова", number);
+
+            Assert.ReferenceEquals(expected, actual);
+        }
+
+        [TestMethod]
+        public void Test5()
+        {
+            string searchedName = "Никита";
+
+            Contact actual = binarySearch.Search(searchedName);
+            Contact expected = null;
+
+            Assert.ReferenceEquals(expected, actual);
+        }
+
+        [TestMethod]
+        public void Test6()
+        {
+            string searchedName = null;
+
+            Contact actual = binarySearch.Search(searchedName);
+            Contact expected = null;
+
+            Assert.ReferenceEquals(expected, actual);
         }
     }
 }

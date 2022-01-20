@@ -2,125 +2,183 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing;
 
-namespace Course_paper
+namespace CoursePaper
 {
     public partial class MainForm : Form
     {
-        AutorizationForm autorization = new AutorizationForm();
+        private readonly AutorizationForm autorization;
+        private List<Contact> contacts = new List<Contact>();
+        private Database database = new Database();
+        private MySqlDataReader reader;
 
-        List<ContactDatabase> _data = new List<ContactDatabase>();
-        public MainForm()
+        public MainForm(AutorizationForm autorization)
         {
             InitializeComponent();
+            this.autorization = autorization;
+            searchNameField.Text = "Введите имя";
+            searchNameField.ForeColor = Color.Gray;
+            AddTableHeader();
+            FillTable();
         }
-        private void AddDataGrid(ContactDatabase table)
+
+        private void AddTableHeader()
         {
-            DataTable.Rows.Add(table.Name, table.Number);
-        }
-        private void TableHeader()
-        {
-            var column1 = new DataGridViewColumn();
-            column1.HeaderText = "Имя";
-            column1.Width = 485;
-            column1.Name = "name";
-            column1.Frozen = true;
-            column1.CellTemplate = new DataGridViewTextBoxCell();
-
-            var column2 = new DataGridViewColumn();
-            column2.HeaderText = "Номер";
-            column2.Width = 285;
-            column2.Name = "number";
-            column2.CellTemplate = new DataGridViewTextBoxCell();
-
-            DataTable.Columns.Add(column1);
-            DataTable.Columns.Add(column2);
-         }
-
-        private void MainForm_Shown(object sender, EventArgs e)
-        {
-            TableHeader();
-
-            Database database = new Database();
-            MySqlCommand command = new MySqlCommand("SELECT * FROM `contacts` ORDER BY `name` ASC", database.GetConnection());
-            MySqlDataReader reader;
-
-            database.OpenConnection();
-            reader = command.ExecuteReader();
-
-            while (reader.Read())
+            var column1 = new DataGridViewColumn
             {
-                ContactDatabase table = new ContactDatabase(reader["name"].ToString(), reader["number"].ToString());
-                _data.Add(table);
+                HeaderText = "Имя",
+                Width = 485,
+                Name = "name",
+                Frozen = true,
+                CellTemplate = new DataGridViewTextBoxCell()
+            };
+
+            var column2 = new DataGridViewColumn
+            {
+                HeaderText = "Номер",
+                Width = 285,
+                Name = "number",
+                CellTemplate = new DataGridViewTextBoxCell()
+            };
+
+            TblContacts.Columns.Add(column1);
+            TblContacts.Columns.Add(column2);
+        }
+
+        private void MainFormEnabledChanged(object sender, EventArgs e)
+        {
+            Clear();
+            FillTable();
+        }
+
+        private void Clear()
+        {
+            contacts.Clear();
+            TblContacts.DataSource = null;
+            TblContacts.Rows.Clear();
+        }
+
+        private void FillTable()
+        {
+            MySqlCommand command = new MySqlCommand("SELECT * FROM `contacts` ORDER BY `name` ASC", database.Connection);
+
+            try
+            {
+                database.OpenConnection();
+                reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Contact contact = new Contact(reader["name"].ToString(), reader["number"].ToString());
+                    contacts.Add(contact);
+                }
+
+                AddContactRows();
+
+                lblContactNumber.Text = contacts.Count.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при заполнение таблицы!\n{ex}");
+            }
+            finally
+            {
+                database.CloseConnection();
+            }
+        }
+
+        private void AddContactRows()
+        {
+            contacts.ForEach(contact => TblContacts.Rows.Add(contact.Name, contact.Number));
+        }
+
+        private void BtnSearchClick(object sender, EventArgs e)
+        {
+            if (searchNameField.Text == "Введите имя")
+            {
+                return;
             }
 
-            for (int i = 0; i < _data.Count; i++)
-                AddDataGrid(_data[i]);
-
-            lbl_contact_number.Text = _data.Count.ToString();
+            SearchContact(searchNameField.Text);
         }
 
-        private void обновитьToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SearchContact(string searchedName)
         {
-            _data.Clear();
+            BinarySearch binarySearch = new BinarySearch(contacts.ToArray());
 
-            Database _manager = new Database();
-            MySqlCommand _command = new MySqlCommand("SELECT * FROM `contacts` ORDER BY `name` ASC", _manager.GetConnection());
-            MySqlDataReader _reader;
+            Contact foundContact = binarySearch.Search(searchedName);
 
-            DataTable.DataSource = null;
-            DataTable.Rows.Clear();
+            bool ContactIsFound = foundContact != null;
 
-            _manager.OpenConnection();
-            _reader = _command.ExecuteReader();
-
-            while (_reader.Read())
+            if (ContactIsFound)
             {
-                ContactDatabase table = new ContactDatabase(_reader["name"].ToString(), _reader["number"].ToString());
-                _data.Add(table);
+                MessageBox.Show($"Контакт найден: {foundContact.Name} {foundContact.Number}");
             }
 
-            for (int i = 0; i < _data.Count; i++)
+            if (!ContactIsFound)
             {
-                AddDataGrid(_data[i]);
+                MessageBox.Show("Контакт не найден");
             }
+        }
 
-            lbl_contact_number.Text = _data.Count.ToString();
-        }
-        private void добавитьКонтактToolStripMenuItem_Click(object sender, EventArgs e)
+        private void TlMenuUpdateClick(object sender, EventArgs e)
         {
-            AddСontactForm add = new AddСontactForm(this);
-            add.Show();
+            Clear();
+            FillTable();
         }
-        private void выходИзПрограммыToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void TlMenuContactAddClick(object sender, EventArgs e)
         {
-            this.Close();
+            ContactAddForm contactAddForm = new ContactAddForm(this);
+            contactAddForm.Show();
+        }
+
+        private void TlMenuReferenceClick(object sender, EventArgs e)
+        {
+            Reference referenceForm= new Reference(this);
+            referenceForm.Show();
+        }
+
+        private void TlMenuContactDeleteClick(object sender, EventArgs e)
+        {
+            ContactDeleteForm contactDeleteForm = new ContactDeleteForm(this);
+            contactDeleteForm.Show();
+        }
+
+        private void TlMenuExitClick(object sender, EventArgs e)
+        {
+            DialogResult dialog = MessageBox.Show("Вы действительно хотите выйти из программы?", "Завершение программы", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (dialog == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void MainFormClosing(object sender, FormClosingEventArgs e)
+        {
             autorization.Show();
         }
-        private void удалитьКонтактToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void SearchNameEnter(object sender, EventArgs e)
         {
-            DeleteContactForm delete = new DeleteContactForm(this);
-            delete.Show();
+            if (searchNameField.Text == "Введите имя")
+            {
+                searchNameField.Text = "";
+                searchNameField.ForeColor = Color.Black;
+            }
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void SearchNameLeave(object sender, EventArgs e)
         {
-            autorization.Show();
-        }
+            searchNameField.Text = searchNameField.Text.Trim();
 
-        private void Search_Click(object sender, EventArgs e)
-        {
-            BinarySearch.Wanted_char_array = tb_search_name.Text.ToCharArray();
-            int status = BinarySearch.SearchContact(_data);
-
-            if (status == -1) MessageBox.Show("Контакт не найден");
-            if (status != -1) MessageBox.Show($"Контакт найден: {_data[status].Name} {_data[status].Number}");
-        }
-
-        private void обToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Reference reference = new Reference(this);
-            reference.Show();
+            if (searchNameField.Text == "")
+            {
+                searchNameField.Text = "Введите имя";
+                searchNameField.ForeColor = Color.Gray;
+            }
         }
     }
 }

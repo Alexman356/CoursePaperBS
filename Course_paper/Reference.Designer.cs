@@ -1,5 +1,5 @@
 ﻿
-namespace Course_paper
+namespace CoursePaper
 {
     partial class Reference
     {
@@ -67,7 +67,7 @@ namespace Course_paper
             this.Back.TabIndex = 12;
             this.Back.Text = "Назад";
             this.Back.UseVisualStyleBackColor = true;
-            this.Back.Click += new System.EventHandler(this.Back_Click);
+            this.Back.Click += new System.EventHandler(this.BtnBackClick);
             // 
             // Reference
             // 
@@ -83,7 +83,7 @@ namespace Course_paper
             this.MinimumSize = new System.Drawing.Size(955, 640);
             this.Name = "Reference";
             this.Text = "О программе";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Reference_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReferenceFormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

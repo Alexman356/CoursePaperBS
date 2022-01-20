@@ -1,7 +1,7 @@
 ﻿
-namespace Course_paper
+namespace CoursePaper
 {
-    partial class AddСontactForm
+    partial class ContactAddForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,9 +29,9 @@ namespace Course_paper
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddСontactForm));
-            this.tb_name = new System.Windows.Forms.TextBox();
-            this.tb_number = new System.Windows.Forms.TextBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContactAddForm));
+            this.nameField = new System.Windows.Forms.TextBox();
+            this.numberField = new System.Windows.Forms.TextBox();
             this.Add = new System.Windows.Forms.Button();
             this.Back = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -39,23 +39,23 @@ namespace Course_paper
             // 
             // tb_name
             // 
-            this.tb_name.Font = new System.Drawing.Font("Calibri", 15.75F);
-            this.tb_name.Location = new System.Drawing.Point(66, 119);
-            this.tb_name.Name = "tb_name";
-            this.tb_name.Size = new System.Drawing.Size(186, 33);
-            this.tb_name.TabIndex = 0;
-            this.tb_name.Enter += new System.EventHandler(this.name_Enter);
-            this.tb_name.Leave += new System.EventHandler(this.name_Leave);
+            this.nameField.Font = new System.Drawing.Font("Calibri", 15.75F);
+            this.nameField.Location = new System.Drawing.Point(66, 119);
+            this.nameField.Name = "tb_name";
+            this.nameField.Size = new System.Drawing.Size(186, 33);
+            this.nameField.TabIndex = 0;
+            this.nameField.Enter += new System.EventHandler(this.NameEnter);
+            this.nameField.Leave += new System.EventHandler(this.NameLeave);
             // 
             // tb_number
             // 
-            this.tb_number.Font = new System.Drawing.Font("Calibri", 15.75F);
-            this.tb_number.Location = new System.Drawing.Point(66, 199);
-            this.tb_number.Name = "tb_number";
-            this.tb_number.Size = new System.Drawing.Size(186, 33);
-            this.tb_number.TabIndex = 1;
-            this.tb_number.Enter += new System.EventHandler(this.number_Enter);
-            this.tb_number.Leave += new System.EventHandler(this.number_Leave);
+            this.numberField.Font = new System.Drawing.Font("Calibri", 15.75F);
+            this.numberField.Location = new System.Drawing.Point(66, 199);
+            this.numberField.Name = "tb_number";
+            this.numberField.Size = new System.Drawing.Size(186, 33);
+            this.numberField.TabIndex = 1;
+            this.numberField.Enter += new System.EventHandler(this.NumberEnter);
+            this.numberField.Leave += new System.EventHandler(this.NumberLeave);
             // 
             // Add
             // 
@@ -67,7 +67,7 @@ namespace Course_paper
             this.Add.TabIndex = 7;
             this.Add.Text = "Добавить";
             this.Add.UseVisualStyleBackColor = true;
-            this.Add.Click += new System.EventHandler(this.Add_Click);
+            this.Add.Click += new System.EventHandler(this.BtnAddClick);
             // 
             // Back
             // 
@@ -79,7 +79,7 @@ namespace Course_paper
             this.Back.TabIndex = 8;
             this.Back.Text = "Назад";
             this.Back.UseVisualStyleBackColor = true;
-            this.Back.Click += new System.EventHandler(this.Back_Click);
+            this.Back.Click += new System.EventHandler(this.BtnBackClick);
             // 
             // label1
             // 
@@ -101,14 +101,14 @@ namespace Course_paper
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Back);
             this.Controls.Add(this.Add);
-            this.Controls.Add(this.tb_number);
-            this.Controls.Add(this.tb_name);
+            this.Controls.Add(this.numberField);
+            this.Controls.Add(this.nameField);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(337, 475);
             this.MinimumSize = new System.Drawing.Size(337, 475);
             this.Name = "AddСontactForm";
             this.Text = "Создание контакта";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddСontactForm_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.СontactAddFormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -116,8 +116,8 @@ namespace Course_paper
 
         #endregion
 
-        private System.Windows.Forms.TextBox tb_name;
-        private System.Windows.Forms.TextBox tb_number;
+        private System.Windows.Forms.TextBox nameField;
+        private System.Windows.Forms.TextBox numberField;
         private System.Windows.Forms.Button Add;
         private System.Windows.Forms.Button Back;
         private System.Windows.Forms.Label label1;

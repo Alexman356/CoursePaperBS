@@ -4,107 +4,132 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Course_paper
+namespace CoursePaper
 {
     public partial class AutorizationForm : Form
     {
         public AutorizationForm()
         {
             InitializeComponent();
-            LoginField.Text = "Введите логин";
-            LoginField.ForeColor = Color.Gray;
-            PassField.Text = "Введите пароль";
-            PassField.ForeColor = Color.Gray;
         }
 
-        private void ButtonAutorization_Click(object sender, EventArgs e)
+        private void AutorizationFormVisibleChanged(object sender, EventArgs e)
         {
-            if ((LoginField.Text == "Введите логин") || (PassField.Text == "Введите пароль"))
+            loginField.Text = "Введите логин";
+            loginField.ForeColor = Color.Gray;
+            passField.UseSystemPasswordChar = false;
+            passField.Text = "Введите пароль";
+            passField.ForeColor = Color.Gray;
+        }
+
+        private void BtnAutorizationClick(object sender, EventArgs e)
+        {
+            if ((loginField.Text == "Введите логин") || (passField.Text == "Введите пароль"))
             {
                 MessageBox.Show("Не все поля заполнены!");
+
                 return;
             }
 
-            String loginUser = LoginField.Text;
-            String passUser = PassField.Text;
+            Autorization(loginField.Text, passField.Text);
+        }
 
+        private void Autorization(string login, string pass)
+        {
             Database database = new Database();
-
             DataTable table = new DataTable();
-
             MySqlDataAdapter adapter = new MySqlDataAdapter();
+            MySqlCommand command = new MySqlCommand("SELECT * FROM `users` WHERE `login` = @uL AND `pass` = @uP", database.Connection);
 
-            MySqlCommand command = new MySqlCommand("SELECT * FROM `users` WHERE `login` = @uL AND `pass` = @uP", database.GetConnection());
-            command.Parameters.Add("@uL", MySqlDbType.VarChar).Value = loginUser;
-            command.Parameters.Add("@uP", MySqlDbType.VarChar).Value = passUser;
+            try
+            {
+                command.Parameters.Add("@uL", MySqlDbType.VarChar).Value = login;
+                command.Parameters.Add("@uP", MySqlDbType.VarChar).Value = pass;
 
-            adapter.SelectCommand = command;
-            adapter.Fill(table);
+                adapter.SelectCommand = command;
+                adapter.Fill(table);
 
-            if (table.Rows.Count > 0)
-            {
-                MessageBox.Show("Вы авторизованы!");
-                this.Hide();
-                MainForm main = new MainForm();
-                main.Show();
-            }
-            else
-                MessageBox.Show("Введен неверный логин или пароль");
-        }
+                bool autorizationIsSuccessfull = table.Rows.Count > 0;
 
-        private void LoginField_Enter(object sender, EventArgs e)
-        {
-            if (LoginField.Text == "Введите логин")
-            {
-                LoginField.Text = "";
-                LoginField.ForeColor = Color.Black;
+                if (autorizationIsSuccessfull)
+                {
+                    MessageBox.Show("Вы авторизованы!");
+                    Hide();
+                    MainForm main = new MainForm(this);
+                    main.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Неверный логин или пароль!");
+                }
             }
-        }
-        private void LoginField_Leave(object sender, EventArgs e)
-        {
-            if (LoginField.Text == "")
+            catch (Exception ex)
             {
-                LoginField.Text = "Введите логин";
-                LoginField.ForeColor = Color.Gray;
+                MessageBox.Show($"Ошибка при авторизации!\n{ex}");
             }
-        }
-        private void PassField_Enter(object sender, EventArgs e)
-        {
-            if (PassField.Text == "Введите пароль")
+            finally
             {
-                PassField.Text = "";
-                PassField.ForeColor = Color.Black;
-                PassField.UseSystemPasswordChar = true;
-            }
-        }
-        private void PassField_Leave(object sender, EventArgs e)
-        {
-            if (PassField.Text == "")
-            {
-                PassField.UseSystemPasswordChar = false;
-                PassField.Text = "Введите пароль";
-                PassField.ForeColor = Color.Gray;
+                database.CloseConnection();
             }
         }
 
-        private void RegistrationLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkToRegistrationClick(object sender, LinkLabelLinkClickedEventArgs e)
         {
             RegistrationForm registration = new RegistrationForm(this);
             registration.Show();
+            Hide();
         }
 
-        private void ExitButton_Click(object sender, EventArgs e)
+        private void BtnExitClick(object sender, EventArgs e)
         {
             DialogResult dialog = MessageBox.Show("Вы действительно хотите выйти из программы?", "Завершение программы", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
             if (dialog == DialogResult.Yes)
             {
                 Application.Exit();
             }
         }
-        private void AutorizationForm_FormClosing(object sender, FormClosingEventArgs e)
+
+        private void LoginFieldEnter(object sender, EventArgs e)
         {
-            e.Cancel = false;
-            Application.Exit();
+            if (loginField.Text == "Введите логин")
+            {
+                loginField.Text = "";
+                loginField.ForeColor = Color.Black;
+            }
+        }
+
+        private void LoginFieldLeave(object sender, EventArgs e)
+        {
+            loginField.Text = loginField.Text.Trim();
+
+            if (loginField.Text == "")
+            {
+                loginField.Text = "Введите логин";
+                loginField.ForeColor = Color.Gray;
+            }
+        }
+
+        private void PassFieldEnter(object sender, EventArgs e)
+        {
+            if (passField.Text == "Введите пароль")
+            {
+                passField.Text = "";
+                passField.ForeColor = Color.Black;
+                passField.UseSystemPasswordChar = true;
+            }
+        }
+
+        private void PassFieldLeave(object sender, EventArgs e)
+        {
+            passField.Text = passField.Text.Trim();
+
+            if (passField.Text == "")
+            {
+                passField.UseSystemPasswordChar = false;
+                passField.Text = "Введите пароль";
+                passField.ForeColor = Color.Gray;
+            }
         }
     }
 }

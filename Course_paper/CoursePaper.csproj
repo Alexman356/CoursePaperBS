@@ -59,11 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddСontactForm.cs">
+    <Compile Include="СontactAddForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddСontactForm.Designer.cs">
-      <DependentUpon>AddСontactForm.cs</DependentUpon>
+    <Compile Include="СontactAddForm.Designer.cs">
+      <DependentUpon>СontactAddForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AutorizationForm.cs">
       <SubType>Form</SubType>
@@ -73,12 +73,12 @@
     </Compile>
     <Compile Include="BinarySearch.cs" />
     <Compile Include="Database.cs" />
-    <Compile Include="ContactDatabase.cs" />
-    <Compile Include="DeleteContactForm.cs">
+    <Compile Include="Contact.cs" />
+    <Compile Include="ContactDeleteForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DeleteContactForm.Designer.cs">
-      <DependentUpon>DeleteContactForm.cs</DependentUpon>
+    <Compile Include="ContactDeleteForm.Designer.cs">
+      <DependentUpon>ContactDeleteForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -101,14 +101,14 @@
       <DependentUpon>RegistrationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Test.cs" />
-    <EmbeddedResource Include="AddСontactForm.resx">
-      <DependentUpon>AddСontactForm.cs</DependentUpon>
+    <EmbeddedResource Include="СontactAddForm.resx">
+      <DependentUpon>СontactAddForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AutorizationForm.resx">
       <DependentUpon>AutorizationForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DeleteContactForm.resx">
-      <DependentUpon>DeleteContactForm.cs</DependentUpon>
+    <EmbeddedResource Include="ContactDeleteForm.resx">
+      <DependentUpon>ContactDeleteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

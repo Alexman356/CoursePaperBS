@@ -1,5 +1,5 @@
 ﻿
-namespace Course_paper
+namespace CoursePaper
 {
     partial class MainForm
     {
@@ -38,13 +38,13 @@ namespace Course_paper
             this.выходИзПрограммыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.обToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
-            this.tb_search_name = new System.Windows.Forms.TextBox();
-            this.DataTable = new System.Windows.Forms.DataGridView();
+            this.searchNameField = new System.Windows.Forms.TextBox();
+            this.TblContacts = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
-            this.lbl_contact_number = new System.Windows.Forms.Label();
+            this.lblContactNumber = new System.Windows.Forms.Label();
             this.Search = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TblContacts)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -74,35 +74,35 @@ namespace Course_paper
             this.обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
             this.обновитьToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.обновитьToolStripMenuItem.Text = "Обновить";
-            this.обновитьToolStripMenuItem.Click += new System.EventHandler(this.обновитьToolStripMenuItem_Click);
+            this.обновитьToolStripMenuItem.Click += new System.EventHandler(this.TlMenuUpdateClick);
             // 
             // добавитьКонтактToolStripMenuItem
             // 
             this.добавитьКонтактToolStripMenuItem.Name = "добавитьКонтактToolStripMenuItem";
             this.добавитьКонтактToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.добавитьКонтактToolStripMenuItem.Text = "Добавить контакт";
-            this.добавитьКонтактToolStripMenuItem.Click += new System.EventHandler(this.добавитьКонтактToolStripMenuItem_Click);
+            this.добавитьКонтактToolStripMenuItem.Click += new System.EventHandler(this.TlMenuContactAddClick);
             // 
             // удалитьКонтактToolStripMenuItem
             // 
             this.удалитьКонтактToolStripMenuItem.Name = "удалитьКонтактToolStripMenuItem";
             this.удалитьКонтактToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.удалитьКонтактToolStripMenuItem.Text = "Удалить контакт";
-            this.удалитьКонтактToolStripMenuItem.Click += new System.EventHandler(this.удалитьКонтактToolStripMenuItem_Click);
+            this.удалитьКонтактToolStripMenuItem.Click += new System.EventHandler(this.TlMenuContactDeleteClick);
             // 
             // выходИзПрограммыToolStripMenuItem
             // 
             this.выходИзПрограммыToolStripMenuItem.Name = "выходИзПрограммыToolStripMenuItem";
             this.выходИзПрограммыToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.выходИзПрограммыToolStripMenuItem.Text = "Выход из программы";
-            this.выходИзПрограммыToolStripMenuItem.Click += new System.EventHandler(this.выходИзПрограммыToolStripMenuItem_Click);
+            this.выходИзПрограммыToolStripMenuItem.Click += new System.EventHandler(this.TlMenuExitClick);
             // 
             // обToolStripMenuItem
             // 
             this.обToolStripMenuItem.Name = "обToolStripMenuItem";
             this.обToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
             this.обToolStripMenuItem.Text = "О программе";
-            this.обToolStripMenuItem.Click += new System.EventHandler(this.обToolStripMenuItem_Click);
+            this.обToolStripMenuItem.Click += new System.EventHandler(this.TlMenuReferenceClick);
             // 
             // label1
             // 
@@ -115,21 +115,23 @@ namespace Course_paper
             this.label1.TabIndex = 1;
             this.label1.Text = "Поиск контактов:";
             // 
-            // tb_search_name
+            // searchNameField
             // 
-            this.tb_search_name.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tb_search_name.Location = new System.Drawing.Point(200, 51);
-            this.tb_search_name.Name = "tb_search_name";
-            this.tb_search_name.Size = new System.Drawing.Size(232, 30);
-            this.tb_search_name.TabIndex = 2;
+            this.searchNameField.Font = new System.Drawing.Font("Calibri", 15.75F);
+            this.searchNameField.Location = new System.Drawing.Point(200, 51);
+            this.searchNameField.Name = "searchNameField";
+            this.searchNameField.Size = new System.Drawing.Size(232, 33);
+            this.searchNameField.TabIndex = 2;
+            this.searchNameField.Enter += new System.EventHandler(this.SearchNameEnter);
+            this.searchNameField.Leave += new System.EventHandler(this.SearchNameLeave);
             // 
-            // DataTable
+            // TblContacts
             // 
-            this.DataTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataTable.Location = new System.Drawing.Point(12, 105);
-            this.DataTable.Name = "DataTable";
-            this.DataTable.Size = new System.Drawing.Size(814, 313);
-            this.DataTable.TabIndex = 3;
+            this.TblContacts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TblContacts.Location = new System.Drawing.Point(12, 105);
+            this.TblContacts.Name = "TblContacts";
+            this.TblContacts.Size = new System.Drawing.Size(814, 313);
+            this.TblContacts.TabIndex = 3;
             // 
             // label2
             // 
@@ -142,16 +144,16 @@ namespace Course_paper
             this.label2.TabIndex = 4;
             this.label2.Text = "Контактов:";
             // 
-            // lbl_contact_number
+            // lblContactNumber
             // 
-            this.lbl_contact_number.AutoSize = true;
-            this.lbl_contact_number.Font = new System.Drawing.Font("Consolas", 14F, System.Drawing.FontStyle.Bold);
-            this.lbl_contact_number.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lbl_contact_number.Location = new System.Drawing.Point(758, 54);
-            this.lbl_contact_number.Name = "lbl_contact_number";
-            this.lbl_contact_number.Size = new System.Drawing.Size(20, 22);
-            this.lbl_contact_number.TabIndex = 5;
-            this.lbl_contact_number.Text = "-";
+            this.lblContactNumber.AutoSize = true;
+            this.lblContactNumber.Font = new System.Drawing.Font("Consolas", 14F, System.Drawing.FontStyle.Bold);
+            this.lblContactNumber.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.lblContactNumber.Location = new System.Drawing.Point(758, 54);
+            this.lblContactNumber.Name = "lblContactNumber";
+            this.lblContactNumber.Size = new System.Drawing.Size(20, 22);
+            this.lblContactNumber.TabIndex = 5;
+            this.lblContactNumber.Text = "-";
             // 
             // Search
             // 
@@ -160,10 +162,10 @@ namespace Course_paper
             this.Search.Location = new System.Drawing.Point(460, 48);
             this.Search.Name = "Search";
             this.Search.Size = new System.Drawing.Size(136, 34);
-            this.Search.TabIndex = 7;
+            this.Search.TabIndex = 1;
             this.Search.Text = "Поиск";
             this.Search.UseVisualStyleBackColor = true;
-            this.Search.Click += new System.EventHandler(this.Search_Click);
+            this.Search.Click += new System.EventHandler(this.BtnSearchClick);
             // 
             // MainForm
             // 
@@ -172,10 +174,10 @@ namespace Course_paper
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
             this.ClientSize = new System.Drawing.Size(838, 430);
             this.Controls.Add(this.Search);
-            this.Controls.Add(this.lbl_contact_number);
+            this.Controls.Add(this.lblContactNumber);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.DataTable);
-            this.Controls.Add(this.tb_search_name);
+            this.Controls.Add(this.TblContacts);
+            this.Controls.Add(this.searchNameField);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -184,11 +186,11 @@ namespace Course_paper
             this.MinimumSize = new System.Drawing.Size(854, 469);
             this.Name = "MainForm";
             this.Text = "Телефонный справочник";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormClosing);
+            this.EnabledChanged += new System.EventHandler(this.MainFormEnabledChanged);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TblContacts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -200,14 +202,14 @@ namespace Course_paper
         private System.Windows.Forms.ToolStripMenuItem действияToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem добавитьКонтактToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem удалитьКонтактToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem выходИзПрограммыToolStripMenuItem;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tb_search_name;
-        private System.Windows.Forms.DataGridView DataTable;
+        private System.Windows.Forms.TextBox searchNameField;
+        private System.Windows.Forms.DataGridView TblContacts;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lbl_contact_number;
+        private System.Windows.Forms.Label lblContactNumber;
         private System.Windows.Forms.ToolStripMenuItem обновитьToolStripMenuItem;
         private System.Windows.Forms.Button Search;
         private System.Windows.Forms.ToolStripMenuItem обToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem выходИзПрограммыToolStripMenuItem;
     }
 }
